@@ -1,0 +1,1827 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SARL SACOM.S - Importation Bois & Dérivés</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2E7D32;
+            --secondary-color: #1B5E20;
+            --accent-color: #4CAF50;
+            --text-dark: #1A1A1A;
+            --text-light: #666666;
+            --white: #FFFFFF;
+            --light-gray: #F8F9FA;
+            --border-color: #E0E0E0;
+            --shadow: 0 4px 15px rgba(0,0,0,0.1);
+            --shadow-hover: 0 8px 25px rgba(0,0,0,0.15);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        .navbar.scrolled {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: var(--shadow);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text-dark);
+        }
+
+        .logo-image {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            object-fit: contain;
+        }
+
+        .logo-text h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: -2px;
+        }
+
+        .logo-text p {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: var(--transition);
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color);
+            background: var(--light-gray);
+        }
+
+        /* Language Switcher */
+        .language-switcher {
+            position: relative;
+        }
+
+        .language-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--white);
+            padding: 8px 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .language-toggle:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .language-dropdown {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            background: var(--white);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            min-width: 180px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: var(--transition);
+            z-index: 1000;
+        }
+
+        .language-switcher.active .language-dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .language-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: var(--transition);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .language-option:last-child {
+            border-bottom: none;
+        }
+
+        .language-option:hover {
+            background: var(--light-gray);
+            color: var(--primary-color);
+        }
+
+        .language-option.active {
+            background: var(--primary-color);
+            color: var(--white);
+        }
+
+        .flag-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .flag-fr { background-image: linear-gradient(to right, #002654, #ffffff, #ce1126); }
+        .flag-ar { background-image: linear-gradient(to bottom, #006633, #ffffff, #D21034); }
+        .flag-en { background-image: linear-gradient(135deg, #012169, #ffffff, #C8102E); }
+
+        /* Mobile Menu */
+        .mobile-menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .hamburger-line {
+            width: 25px;
+            height: 3px;
+            background: var(--text-dark);
+            margin: 3px 0;
+            transition: var(--transition);
+            border-radius: 2px;
+        }
+
+        .mobile-menu-toggle.active .hamburger-line:nth-child(1) {
+            transform: rotate(-45deg) translate(-6px, 6px);
+        }
+
+        .mobile-menu-toggle.active .hamburger-line:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-toggle.active .hamburger-line:nth-child(3) {
+            transform: rotate(45deg) translate(-6px, -6px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: var(--white);
+            border-top: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+        }
+
+        .mobile-menu.active {
+            display: block;
+        }
+
+        .mobile-menu-list {
+            list-style: none;
+            padding: 1rem 0;
+        }
+
+        .mobile-menu-list li {
+            padding: 0 2rem;
+        }
+
+        .mobile-menu-list .nav-link {
+            display: block;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, rgba(46, 125, 50, 0.9), rgba(27, 94, 32, 0.8)), 
+                        url('https://images.unsplash.com/photo-1574263867128-a2d5e67e2a39?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80') center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--white);
+            position: relative;
+            padding: 100px 0 50px;
+            box-sizing: border-box;
+        }
+
+        .hero-content {
+            max-width: 1000px;
+            padding: 0 2rem;
+            z-index: 2;
+            width: 100%;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            color: var(--white);
+            font-weight: 600;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+            margin-bottom: 3rem;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            white-space: nowrap;
+            box-sizing: border-box;
+        }
+
+        .btn-primary {
+            background: var(--white);
+            color: var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background: var(--light-gray);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid var(--white);
+        }
+
+        .btn-secondary:hover {
+            background: var(--white);
+            color: var(--primary-color);
+        }
+
+        /* Company Stats */
+        .stats-section {
+            padding: 4rem 0;
+            background: var(--light-gray);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            text-align: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: 1.8rem 1.2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 1.5rem;
+            background: var(--primary-color);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.5rem;
+        }
+
+        .stat-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-description {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Products Section */
+        .products-section {
+            padding: 5rem 0;
+            background: var(--white);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: var(--light-gray);
+            color: var(--primary-color);
+            border-radius: 20px;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .section-description {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .product-image {
+            height: 250px;
+            background: var(--light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            font-size: 1.1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-image::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100px;
+            height: 100px;
+            background: var(--border-color);
+            border-radius: 12px;
+            transform: translate(-50%, -50%);
+        }
+
+        .product-image i {
+            font-size: 2.5rem;
+            color: var(--text-light);
+            z-index: 1;
+        }
+
+        .product-content {
+            padding: 2rem;
+        }
+
+        .product-category {
+            display: inline-block;
+            padding: 6px 12px;
+            background: var(--primary-color);
+            color: var(--white);
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .product-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .product-description {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .product-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .product-features li {
+            padding: 8px 0;
+            color: var(--text-light);
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .product-features li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 15px;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-color);
+            border-radius: 50%;
+        }
+
+        .product-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-sm {
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            border-radius: 6px;
+        }
+
+        /* About Section */
+        .about-section {
+            padding: 5rem 0;
+            background: var(--light-gray);
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-text h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+        }
+
+        .about-text .highlight {
+            color: var(--primary-color);
+        }
+
+        .about-text p {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--primary-color);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .about-image {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .about-image img {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+        }
+
+        /* Locations Section */
+        .locations-section {
+            padding: 5rem 0;
+            background: var(--white);
+        }
+
+        .locations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 3rem;
+        }
+
+        .location-card {
+            background: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .location-header {
+            padding: 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .location-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .location-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--primary-color);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.2rem;
+        }
+
+        .location-map {
+            height: 350px;
+        }
+
+        .location-map iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--text-dark);
+            color: var(--white);
+            padding: 3rem 0 1.5rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            color: var(--accent-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-section p,
+        .footer-section li {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 0.8rem;
+            line-height: 1.6;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-section a:hover {
+            color: var(--accent-color);
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-logo img {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+        }
+
+        .footer-logo-text h3 {
+            font-size: 1.8rem;
+            color: var(--white);
+            margin-bottom: 0;
+        }
+
+        .footer-logo-text p {
+            font-size: 0.9rem;
+            margin-bottom: 0;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Language content management */
+        .lang-content {
+            display: none;
+        }
+
+        .lang-content.active {
+            display: block;
+        }
+
+        [dir="rtl"] {
+            text-align: right;
+        }
+
+        [dir="rtl"] .nav-container {
+            flex-direction: row-reverse;
+        }
+
+        [dir="rtl"] .hero-buttons {
+            flex-direction: row-reverse;
+        }
+
+        [dir="rtl"] .about-content {
+            direction: rtl;
+        }
+
+        [dir="rtl"] .location-title {
+            flex-direction: row-reverse;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-menu, .language-switcher {
+                display: none;
+            }
+
+            .mobile-menu-toggle {
+                display: flex;
+            }
+
+            .nav-container {
+                padding: 0 1rem;
+            }
+
+            .hero-content {
+                padding: 0 1rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+
+            .stat-card {
+                padding: 1.5rem 1rem;
+                min-height: 180px;
+            }
+
+            .stat-icon {
+                width: 50px;
+                height: 50px;
+                margin-bottom: 1rem;
+                font-size: 1.3rem;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .locations-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .product-buttons {
+                flex-direction: column;
+            }
+
+            .btn-sm {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .location-card {
+                margin: 0 -1rem;
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo-container">
+                <img src="LogoSacom.png" alt="SARL SACOM.S Logo" class="logo-image" onerror="this.style.display='none';">
+                <div class="logo-text">
+                    <h1 data-translate="company-name">SARL SACOM.S</h1>
+                    <p data-translate="company-tagline">Importation Bois & Dérivés</p>
+                </div>
+            </a>
+
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link" data-translate="nav-home">Accueil</a></li>
+                <li><a href="#about" class="nav-link" data-translate="nav-about">À propos</a></li>
+                <li><a href="#products" class="nav-link" data-translate="nav-products">Produits</a></li>
+                <li><a href="#locations" class="nav-link" data-translate="nav-locations">Localisations</a></li>
+            </ul>
+
+            <div class="language-switcher" id="languageSwitcher">
+                <div class="language-toggle" id="languageToggle">
+                    <i class="fas fa-globe"></i>
+                    <span id="currentLang" data-translate="current-lang">Français</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="language-dropdown" id="languageDropdown">
+                    <div class="language-option active" onclick="setLanguage('fr')" data-lang="fr">
+                        <div class="flag-icon flag-fr"></div>
+                        <span>Français</span>
+                    </div>
+                    <div class="language-option" onclick="setLanguage('ar')" data-lang="ar">
+                        <div class="flag-icon flag-ar"></div>
+                        <span>العربية</span>
+                    </div>
+                    <div class="language-option" onclick="setLanguage('en')" data-lang="en">
+                        <div class="flag-icon flag-en"></div>
+                        <span>English</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mobile-menu-toggle" id="mobileMenuToggle">
+                <div class="hamburger-line"></div>
+                <div class="hamburger-line"></div>
+                <div class="hamburger-line"></div>
+            </div>
+        </div>
+
+        <div class="mobile-menu" id="mobileMenu">
+            <ul class="mobile-menu-list">
+                <li><a href="#home" class="nav-link" data-translate="nav-home">Accueil</a></li>
+                <li><a href="#about" class="nav-link" data-translate="nav-about">À propos</a></li>
+                <li><a href="#products" class="nav-link" data-translate="nav-products">Produits</a></li>
+                <li><a href="#locations" class="nav-link" data-translate="nav-locations">Localisations</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <div class="hero-badge" data-translate="hero-badge">Depuis 1999</div>
+            <h1>
+                <span data-translate="hero-title">SARL SACOM.S</span><br>
+                <span data-translate="hero-subtitle-text">Votre partenaire en matériaux de construction</span>
+            </h1>
+            <p data-translate="hero-description">Spécialisés dans l'importation de bois et dérivés de qualité, nous accompagnons vos projets de construction avec expertise et professionnalisme depuis plus de 25 ans.</p>
+            <div class="hero-buttons">
+                <a href="#products" class="btn btn-primary">
+                    <i class="fas fa-eye"></i>
+                    <span data-translate="hero-btn-products">Découvrir nos produits</span>
+                </a>
+                <a href="#locations" class="btn btn-secondary">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span data-translate="hero-btn-contact">Nos adresses</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-calendar"></i></div>
+                    <div class="stat-number">25+</div>
+                    <div class="stat-label" data-translate="stat-years">Années d'expérience</div>
+                    <div class="stat-description" data-translate="stat-years-desc">Depuis 1999</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-warehouse"></i></div>
+                    <div class="stat-number">2</div>
+                    <div class="stat-label" data-translate="stat-depots">Dépôts</div>
+                    <div class="stat-description" data-translate="stat-depots-desc">Tadjenanet et Koléa</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-handshake"></i></div>
+                    <div class="stat-number">200+</div>
+                    <div class="stat-label" data-translate="stat-clients">Clients satisfaits</div>
+                    <div class="stat-description" data-translate="stat-clients-desc">Professionnels et entreprises</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-boxes"></i></div>
+                    <div class="stat-number">6</div>
+                    <div class="stat-label" data-translate="stat-products">Gammes de produits</div>
+                    <div class="stat-description" data-translate="stat-products-desc">Solutions complètes</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-coins"></i></div>
+                    <div class="stat-number">245M</div>
+                    <div class="stat-label" data-translate="stat-capital">Capital (DA)</div>
+                    <div class="stat-description" data-translate="stat-capital-desc">Solidité financière</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-shipping-fast"></i></div>
+                    <div class="stat-number">24h</div>
+                    <div class="stat-label" data-translate="stat-delivery">Livraison rapide</div>
+                    <div class="stat-description" data-translate="stat-delivery-desc">Service efficace</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="products-section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge" data-translate="products-badge">Nos spécialités</div>
+                <h2 class="section-title" data-translate="products-title">Gamme de produits</h2>
+                <p class="section-description" data-translate="products-description">Une sélection de matériaux de construction de qualité pour tous vos projets professionnels</p>
+            </div>
+            
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="product-image">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <div class="product-content">
+                        <div class="product-category" data-translate="category-wood">Bois</div>
+                        <h3 class="product-title" data-translate="product-1-title">Contreplaqués</h3>
+                        <p class="product-description" data-translate="product-1-desc">Contreplaqués de qualité en dimensions 1220x2440mm, adaptés pour tous vos projets de construction et d'aménagement.</p>
+                        <ul class="product-features">
+                            <li data-translate="product-1-feat-1">Résistance à l'humidité E1</li>
+                            <li data-translate="product-1-feat-2">Finitions soignées</li>
+                            <li data-translate="product-1-feat-3">Différentes épaisseurs disponibles</li>
+                            <li data-translate="product-1-feat-4">Certifications qualité</li>
+                        </ul>
+                        <div class="product-buttons">
+                            <a href="#locations" class="btn btn-primary btn-sm">
+                                <i class="fas fa-phone"></i>
+                                <span data-translate="btn-contact">Demander un devis</span>
+                            </a>
+                            <a href="#" class="btn btn-secondary btn-sm">
+                                <i class="fas fa-info-circle"></i>
+                                <span data-translate="btn-details">Détails</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <i class="fas fa-square-full"></i>
+                    </div>
+                    <div class="product-content">
+                        <div class="product-category" data-translate="category-panels">Panneaux</div>
+                        <h3 class="product-title" data-translate="product-2-title">MDF Mélaminé</h3>
+                        <p class="product-description" data-translate="product-2-desc">Panneaux MDF mélaminé avec finitions de qualité, parfaits pour l'ameublement et la décoration intérieure.</p>
+                        <ul class="product-features">
+                            <li data-translate="product-2-feat-1">Finitions décoratives variées</li>
+                            <li data-translate="product-2-feat-2">Épaisseurs de 7,5mm à 25mm</li>
+                            <li data-translate="product-2-feat-3">Surface lisse et uniforme</li>
+                            <li data-translate="product-2-feat-4">Facilité d'usinage</li>
+                        </ul>
+                        <div class="product-buttons">
+                            <a href="#locations" class="btn btn-primary btn-sm">
+                                <i class="fas fa-phone"></i>
+                                <span data-translate="btn-contact">Demander un devis</span>
+                            </a>
+                            <a href="#" class="btn btn-secondary btn-sm">
+                                <i class="fas fa-palette"></i>
+                                <span data-translate="btn-colors">Couleurs disponibles</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <i class="fas fa-tree"></i>
+                    </div>
+                    <div class="product-content">
+                        <div class="product-category" data-translate="category-solid">Bois massif</div>
+                        <h3 class="product-title" data-translate="product-3-title">Bois massif</h3>
+                        <p class="product-description" data-translate="product-3-desc">Sélection d'essences de bois massif : chêne, hêtre et bois exotiques pour vos projets d'exception.</p>
+                        <ul class="product-features">
+                            <li data-translate="product-3-feat-1">Essences nobles disponibles</li>
+                            <li data-translate="product-3-feat-2">Séchage contrôlé</li>
+                            <li data-translate="product-3-feat-3">Dimensions sur mesure possibles</li>
+                            <li data-translate="product-3-feat-4">Origine certifiée</li>
+                        </ul>
+                        <div class="product-buttons">
+                            <a href="#locations" class="btn btn-primary btn-sm">
+                                <i class="fas fa-phone"></i>
+                                <span data-translate="btn-contact">Demander un devis</span>
+                            </a>
+                            <a href="#" class="btn btn-secondary btn-sm">
+                                <i class="fas fa-certificate"></i>
+                                <span data-translate="btn-species">Types d'essences</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <i class="fas fa-grip-lines"></i>
+                    </div>
+                    <div class="product-content">
+                        <div class="product-category" data-translate="category-decoration">Décoration</div>
+                        <h3 class="product-title" data-translate="product-4-title">Lattes et plaquages</h3>
+                        <p class="product-description" data-translate="product-4-desc">Solutions décoratives modernes pour l'architecture intérieure : lattes et plaquages de qualité.</p>
+                        <ul class="product-features">
+                            <li data-translate="product-4-feat-1">Finitions chêne et hêtre</li>
+                            <li data-translate="product-4-feat-2">Plaquages décoratifs</li>
+                            <li data-translate="product-4-feat-3">Installation facile</li>
+                            <li data-translate="product-4-feat-4">Effet architectural garanti</li>
+                        </ul>
+                        <div class="product-buttons">
+                            <a href="#locations" class="btn btn-primary btn-sm">
+                                <i class="fas fa-phone"></i>
+                                <span data-translate="btn-contact">Demander un devis</span>
+                            </a>
+                            <a href="#" class="btn btn-secondary btn-sm">
+                                <i class="fas fa-images"></i>
+                                <span data-translate="btn-gallery">Voir la galerie</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <i class="fas fa-hard-hat"></i>
+                    </div>
+                    <div class="product-content">
+                        <div class="product-category" data-translate="category-construction">Construction</div>
+                        <h3 class="product-title" data-translate="product-5-title">Matériaux de construction</h3>
+                        <p class="product-description" data-translate="product-5-desc">Solutions techniques pour les professionnels : Parkelize et étais pour vos chantiers.</p>
+                        <ul class="product-features">
+                            <li data-translate="product-5-feat-1">Parkelize résistant</li>
+                            <li data-translate="product-5-feat-2">Étais métalliques certifiés</li>
+                            <li data-translate="product-5-feat-3">Accessoires de chantier</li>
+                            <li data-translate="product-5-feat-4">Conseil technique inclus</li>
+                        </ul>
+                        <div class="product-buttons">
+                            <a href="#locations" class="btn btn-primary btn-sm">
+                                <i class="fas fa-phone"></i>
+                                <span data-translate="btn-contact">Demander un devis</span>
+                            </a>
+                            <a href="#" class="btn btn-secondary btn-sm">
+                                <i class="fas fa-calculator"></i>
+                                <span data-translate="btn-calculate">Calcul de charges</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <div class="product-content">
+                        <div class="product-category" data-translate="category-hardware">Quincaillerie</div>
+                        <h3 class="product-title" data-translate="product-6-title">Quincaillerie</h3>
+                        <p class="product-description" data-translate="product-6-desc">Gamme complète de quincaillerie et visserie de qualité pour tous vos assemblages.</p>
+                        <ul class="product-features">
+                            <li data-translate="product-6-feat-1">Visserie de précision</li>
+                            <li data-translate="product-6-feat-2">Équipements certifiés</li>
+                            <li data-translate="product-6-feat-3">Outils professionnels</li>
+                            <li data-translate="product-6-feat-4">Garantie qualité</li>
+                        </ul>
+                        <div class="product-buttons">
+                            <a href="#locations" class="btn btn-primary btn-sm">
+                                <i class="fas fa-phone"></i>
+                                <span data-translate="btn-contact">Demander un devis</span>
+                            </a>
+                            <a href="#" class="btn btn-secondary btn-sm">
+                                <i class="fas fa-list"></i>
+                                <span data-translate="btn-catalog">Catalogue complet</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>
+                        <span data-translate="about-title-1">25 ans d'</span>
+                        <span class="highlight" data-translate="about-title-2">expertise</span><br>
+                        <span data-translate="about-title-3">et de savoir-faire</span>
+                    </h2>
+                    <p data-translate="about-p1">Fondée en 1999, SARL SACOM.S est devenue une référence incontournable dans l'importation de matériaux de construction en Algérie.</p>
+                    <p data-translate="about-p2">Avec un capital social de 245 millions de dinars algériens, nous garantissons la stabilité et la qualité de nos services à une clientèle exigeante.</p>
+                    <p data-translate="about-p3">Notre expertise couvre l'ensemble des métiers du bois, de la quincaillerie aux équipements techniques les plus spécialisés.</p>
+                    
+                    <div class="features-grid">
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-medal"></i>
+                            </div>
+                            <div>
+                                <h4 data-translate="feature-1-title">Qualité garantie</h4>
+                                <p data-translate="feature-1-desc">Standards professionnels</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-shipping-fast"></i>
+                            </div>
+                            <div>
+                                <h4 data-translate="feature-2-title">Livraison rapide</h4>
+                                <p data-translate="feature-2-desc">Service efficace garanti</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-user-tie"></i>
+                            </div>
+                            <div>
+                                <h4 data-translate="feature-3-title">Conseil expert</h4>
+                                <p data-translate="feature-3-desc">Accompagnement personnalisé</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-map-marked-alt"></i>
+                            </div>
+                            <div>
+                                <h4 data-translate="feature-4-title">Présence nationale</h4>
+                                <p data-translate="feature-4-desc">Couverture du territoire</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="about-image">
+                    <img src="https://scontent.fczl1-2.fna.fbcdn.net/v/t39.30808-6/481999421_1167832488466898_1403679360164487005_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=dQDiXP0zTcAQ7kNvwGLqtHl&_nc_oc=AdmyMD37eBdLQ1HqB0DTXJQPglMS0XKlqrFnNVouQnB5g6o4QWC6HSVqm4Ti_ROgBW0&_nc_zt=23&_nc_ht=scontent.fczl1-2.fna&_nc_gid=3WkFsKLyeHs-RBYb-1LWhg&oh=00_AfVvuFG-SwD9LgMhdcf6F6-rk-3Ky7o1vEm9oOvr_BCF2g&oe=68B0E79B" alt="SARL SACOM.S - Notre local et équipe">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Locations Section -->
+    <section id="locations" class="locations-section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge" data-translate="locations-badge">Nos adresses</div>
+                <h2 class="section-title" data-translate="locations-title">Où nous trouver</h2>
+                <p class="section-description" data-translate="locations-description">Deux implantations stratégiques pour mieux vous servir sur tout le territoire</p>
+            </div>
+
+            <div class="locations-grid">
+                <div class="location-card">
+                    <div class="location-header">
+                        <h3 class="location-title">
+                            <div class="location-icon">
+                                <i class="fas fa-building"></i>
+                            </div>
+                            <span data-translate="location-1-title">Siège social - Tadjenanet</span>
+                        </h3>
+                    </div>
+                    <div class="location-map">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3264.8234567890123!2d6.0008863!3d36.1248118!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12f3bfb927a44e51%3A0x618532cb2d572ee!2sSarl%20sacom!5e0!3m2!1sfr!2sdz!4v1699123456789!5m2!1sfr!2sdz"
+                            allowfullscreen=""
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+                </div>
+
+                <div class="location-card">
+                    <div class="location-header">
+                        <h3 class="location-title">
+                            <div class="location-icon">
+                                <i class="fas fa-warehouse"></i>
+                            </div>
+                            <span data-translate="location-2-title">Dépôt - Koléa</span>
+                        </h3>
+                    </div>
+                    <div class="location-map">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3234.5678901234567!2d2.7999279!3d36.6363267!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x128fa155d8fec4f3%3A0xc6c1cca9616259a4!2sSarl%20Sacom.s%20Kolea!5e0!3m2!1sfr!2sdz!4v1699123456789!5m2!1sfr!2sdz"
+                            allowfullscreen=""
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <img src="LogoSacom.png" alt="SARL SACOM.S" onerror="this.style.display='none';">
+                        <div class="footer-logo-text">
+                            <h3>SARL SACOM.S</h3>
+                            <p data-translate="footer-tagline">Votre partenaire depuis 1999</p>
+                        </div>
+                    </div>
+                    <p data-translate="footer-description">Spécialistes en importation de matériaux de construction de qualité en Algérie depuis plus de 25 ans.</p>
+                    <p><strong data-translate="footer-capital">Capital social :</strong> 245 000 000,00 DA</p>
+                    <p><strong>RC N° :</strong> 99 B 0063083 03/43</p>
+                    <p><strong>NIF :</strong> 099925010268913</p>
+                </div>
+
+                <div class="footer-section">
+                    <h3 data-translate="footer-contact-title">Contact</h3>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> sarlsacomsahraoui@gmail.com</li>
+                        <li><i class="fas fa-phone"></i> +213 31 48 32 68</li>
+                        <li><i class="fas fa-mobile-alt"></i> 0560 91 05 27</li>
+                        <li data-translate="footer-hours-title"><strong>Horaires :</strong></li>
+                        <li data-translate="footer-hours-1">Dim-Jeu : 08h00-17h00</li>
+                        <li data-translate="footer-hours-2">Samedi : 08h00-12h00</li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3 data-translate="footer-locations-title">Nos adresses</h3>
+                    <ul>
+                        <li><strong data-translate="footer-tadjenanet">Siège - Tadjenanet</strong></li>
+                        <li>Route Nationale N°5, Mila</li>
+                        <li><i class="fas fa-phone"></i> 0561 63 17 10</li>
+                        <li><strong data-translate="footer-kolea">Dépôt - Koléa</strong></li>
+                        <li>Chawki</li>
+                        <li><i class="fas fa-phone"></i> 0550 21 44 93</li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3 data-translate="footer-products-title">Nos produits</h3>
+                    <ul>
+                        <li><a href="#products" data-translate="footer-product-1">Contreplaqués</a></li>
+                        <li><a href="#products" data-translate="footer-product-2">MDF Mélaminé</a></li>
+                        <li><a href="#products" data-translate="footer-product-3">Bois massif</a></li>
+                        <li><a href="#products" data-translate="footer-product-4">Lattes et plaquages</a></li>
+                        <li><a href="#products" data-translate="footer-product-5">Matériaux construction</a></li>
+                        <li><a href="#products" data-translate="footer-product-6">Quincaillerie</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 SARL SACOM.S - <span data-translate="footer-copyright">Tous droits réservés. Spécialistes en importation de matériaux de construction.</span></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Complete Translation System
+        const translations = {
+            fr: {
+                'company-name': 'SARL SACOM.S',
+                'company-tagline': 'Importation Bois & Dérivés',
+                'current-lang': 'Français',
+                'nav-home': 'Accueil',
+                'nav-about': 'À propos',
+                'nav-products': 'Produits',
+                'nav-locations': 'Localisations',
+                'hero-badge': 'Depuis 1999',
+                'hero-title': 'SARL SACOM.S',
+                'hero-subtitle-text': 'Votre partenaire en matériaux de construction',
+                'hero-description': 'Spécialisés dans l\'importation de bois et dérivés de qualité, nous accompagnons vos projets de construction avec expertise et professionnalisme depuis plus de 25 ans.',
+                'hero-btn-products': 'Découvrir nos produits',
+                'hero-btn-contact': 'Nos adresses',
+                'stat-years': 'Années d\'expérience',
+                'stat-years-desc': 'Depuis 1999',
+                'stat-depots': 'Dépôts',
+                'stat-depots-desc': 'Tadjenanet et Koléa',
+                'stat-clients': 'Clients satisfaits',
+                'stat-clients-desc': 'Professionnels et entreprises',
+                'stat-products': 'Gammes de produits',
+                'stat-products-desc': 'Solutions complètes',
+                'stat-capital': 'Capital (DA)',
+                'stat-capital-desc': 'Solidité financière',
+                'stat-delivery': 'Livraison rapide',
+                'stat-delivery-desc': 'Service efficace',
+                'products-badge': 'Nos spécialités',
+                'products-title': 'Gamme de produits',
+                'products-description': 'Une sélection de matériaux de construction de qualité pour tous vos projets professionnels',
+                'category-wood': 'Bois',
+                'category-panels': 'Panneaux',
+                'category-solid': 'Bois massif',
+                'category-decoration': 'Décoration',
+                'category-construction': 'Construction',
+                'category-hardware': 'Quincaillerie',
+                'product-1-title': 'Contreplaqués',
+                'product-1-desc': 'Contreplaqués de qualité en dimensions 1220x2440mm, adaptés pour tous vos projets de construction et d\'aménagement.',
+                'product-1-feat-1': 'Résistance à l\'humidité E1',
+                'product-1-feat-2': 'Finitions soignées',
+                'product-1-feat-3': 'Différentes épaisseurs disponibles',
+                'product-1-feat-4': 'Certifications qualité',
+                'product-2-title': 'MDF Mélaminé',
+                'product-2-desc': 'Panneaux MDF mélaminé avec finitions de qualité, parfaits pour l\'ameublement et la décoration intérieure.',
+                'product-2-feat-1': 'Finitions décoratives variées',
+                'product-2-feat-2': 'Épaisseurs de 7,5mm à 25mm',
+                'product-2-feat-3': 'Surface lisse et uniforme',
+                'product-2-feat-4': 'Facilité d\'usinage',
+                'product-3-title': 'Bois massif',
+                'product-3-desc': 'Sélection d\'essences de bois massif : chêne, hêtre et bois exotiques pour vos projets d\'exception.',
+                'product-3-feat-1': 'Essences nobles disponibles',
+                'product-3-feat-2': 'Séchage contrôlé',
+                'product-3-feat-3': 'Dimensions sur mesure possibles',
+                'product-3-feat-4': 'Origine certifiée',
+                'product-4-title': 'Lattes et plaquages',
+                'product-4-desc': 'Solutions décoratives modernes pour l\'architecture intérieure : lattes et plaquages de qualité.',
+                'product-4-feat-1': 'Finitions chêne et hêtre',
+                'product-4-feat-2': 'Plaquages décoratifs',
+                'product-4-feat-3': 'Installation facile',
+                'product-4-feat-4': 'Effet architectural garanti',
+                'product-5-title': 'Matériaux de construction',
+                'product-5-desc': 'Solutions techniques pour les professionnels : Parkelize et étais pour vos chantiers.',
+                'product-5-feat-1': 'Parkelize résistant',
+                'product-5-feat-2': 'Étais métalliques certifiés',
+                'product-5-feat-3': 'Accessoires de chantier',
+                'product-5-feat-4': 'Conseil technique inclus',
+                'product-6-title': 'Quincaillerie',
+                'product-6-desc': 'Gamme complète de quincaillerie et visserie de qualité pour tous vos assemblages.',
+                'product-6-feat-1': 'Visserie de précision',
+                'product-6-feat-2': 'Équipements certifiés',
+                'product-6-feat-3': 'Outils professionnels',
+                'product-6-feat-4': 'Garantie qualité',
+                'btn-contact': 'Demander un devis',
+                'btn-details': 'Détails',
+                'btn-colors': 'Couleurs disponibles',
+                'btn-species': 'Types d\'essences',
+                'btn-gallery': 'Voir la galerie',
+                'btn-calculate': 'Calcul de charges',
+                'btn-catalog': 'Catalogue complet',
+                'about-title-1': '25 ans d\'',
+                'about-title-2': 'expertise',
+                'about-title-3': 'et de savoir-faire',
+                'about-p1': 'Fondée en 1999, SARL SACOM.S est devenue une référence incontournable dans l\'importation de matériaux de construction en Algérie.',
+                'about-p2': 'Avec un capital social de 245 millions de dinars algériens, nous garantissons la stabilité et la qualité de nos services à une clientèle exigeante.',
+                'about-p3': 'Notre expertise couvre l\'ensemble des métiers du bois, de la quincaillerie aux équipements techniques les plus spécialisés.',
+                'feature-1-title': 'Qualité garantie',
+                'feature-1-desc': 'Standards professionnels',
+                'feature-2-title': 'Livraison rapide',
+                'feature-2-desc': 'Service efficace garanti',
+                'feature-3-title': 'Conseil expert',
+                'feature-3-desc': 'Accompagnement personnalisé',
+                'feature-4-title': 'Présence nationale',
+                'feature-4-desc': 'Couverture du territoire',
+                'locations-badge': 'Nos adresses',
+                'locations-title': 'Où nous trouver',
+                'locations-description': 'Deux implantations stratégiques pour mieux vous servir sur tout le territoire',
+                'location-1-title': 'Siège social - Tadjenanet',
+                'location-2-title': 'Dépôt - Koléa',
+                'footer-tagline': 'Votre partenaire depuis 1999',
+                'footer-description': 'Spécialistes en importation de matériaux de construction de qualité en Algérie depuis plus de 25 ans.',
+                'footer-capital': 'Capital social',
+                'footer-contact-title': 'Contact',
+                'footer-hours-title': 'Horaires :',
+                'footer-hours-1': 'Dim-Jeu : 08h00-17h00',
+                'footer-hours-2': 'Samedi : 08h00-12h00',
+                'footer-locations-title': 'Nos adresses',
+                'footer-tadjenanet': 'Siège - Tadjenanet',
+                'footer-kolea': 'Dépôt - Koléa',
+                'footer-products-title': 'Nos produits',
+                'footer-product-1': 'Contreplaqués',
+                'footer-product-2': 'MDF Mélaminé',
+                'footer-product-3': 'Bois massif',
+                'footer-product-4': 'Lattes et plaquages',
+                'footer-product-5': 'Matériaux construction',
+                'footer-product-6': 'Quincaillerie',
+                'footer-copyright': 'Tous droits réservés. Spécialistes en importation de matériaux de construction.'
+            },
+            
+            ar: {
+                'company-name': 'شركة ساكوم الأسرار',
+                'company-tagline': 'استيراد الأخشاب ومشتقاتها',
+                'current-lang': 'العربية',
+                'nav-home': 'الرئيسية',
+                'nav-about': 'من نحن',
+                'nav-products': 'المنتجات',
+                'nav-locations': 'المواقع',
+                'hero-badge': 'منذ 1999',
+                'hero-title': 'شركة ساكوم الأسرار',
+                'hero-subtitle-text': 'شريككم في مواد البناء',
+                'hero-description': 'متخصصون في استيراد الأخشاب ومشتقاتها عالية الجودة، نرافق مشاريع البناء الخاصة بكم بخبرة ومهنية لأكثر من 25 سنة.',
+                'hero-btn-products': 'اكتشف منتجاتنا',
+                'hero-btn-contact': 'عناويننا',
+                'stat-years': 'سنة خبرة',
+                'stat-years-desc': 'منذ 1999',
+                'stat-depots': 'مستودعات',
+                'stat-depots-desc': 'تجنانت وكوليا',
+                'stat-clients': 'عميل راض',
+                'stat-clients-desc': 'مهنيون وشركات',
+                'stat-products': 'مجموعات المنتجات',
+                'stat-products-desc': 'حلول شاملة',
+                'stat-capital': 'رأس المال (دج)',
+                'stat-capital-desc': 'قوة مالية',
+                'stat-delivery': 'توصيل سريع',
+                'stat-delivery-desc': 'خدمة فعالة',
+                'products-badge': 'تخصصاتنا',
+                'products-title': 'مجموعة المنتجات',
+                'products-description': 'مجموعة مختارة من مواد البناء عالية الجودة لجميع مشاريعكم المهنية',
+                'category-wood': 'أخشاب',
+                'category-panels': 'ألواح',
+                'category-solid': 'خشب صلب',
+                'category-decoration': 'الديكور',
+                'category-construction': 'البناء',
+                'category-hardware': 'أدوات معدنية',
+                'product-1-title': 'الخشب المقوى',
+                'product-1-desc': 'الخشب المقوى عالي الجودة بأبعاد 1220x2440مم، مناسب لجميع مشاريع البناء والتطوير.',
+                'product-1-feat-1': 'مقاومة للرطوبة E1',
+                'product-1-feat-2': 'تشطيبات عالية الجودة',
+                'product-1-feat-3': 'سماكات مختلفة متاحة',
+                'product-1-feat-4': 'شهادات الجودة',
+                'product-2-title': 'MDF المطلي',
+                'product-2-desc': 'ألواح MDF المطلي بتشطيبات عالية الجودة، مثالية للأثاث والديكور الداخلي.',
+                'product-2-feat-1': 'تشطيبات ديكورية متنوعة',
+                'product-2-feat-2': 'سماكات من 7.5مم إلى 25مم',
+                'product-2-feat-3': 'سطح ناعم ومتجانس',
+                'product-2-feat-4': 'سهولة في التشكيل',
+                'product-3-title': 'خشب صلب',
+                'product-3-desc': 'مجموعة مختارة من أنواع الخشب الصلب: البلوط، الزان والأخشاب الاستوائية لمشاريعكم المميزة.',
+                'product-3-feat-1': 'أنواع خشب نبيلة متاحة',
+                'product-3-feat-2': 'تجفيف مراقب',
+                'product-3-feat-3': 'أبعاد حسب الطلب ممكنة',
+                'product-3-feat-4': 'منشأ معتمد',
+                'product-4-title': 'شرائح وقشور',
+                'product-4-desc': 'حلول ديكورية حديثة للهندسة الداخلية: شرائح وقشور عالية الجودة.',
+                'product-4-feat-1': 'تشطيبات البلوط والزان',
+                'product-4-feat-2': 'قشور ديكورية',
+                'product-4-feat-3': 'تركيب سهل',
+                'product-4-feat-4': 'تأثير معماري مضمون',
+                'product-5-title': 'مواد البناء',
+                'product-5-desc': 'حلول تقنية للمهنيين: باركيليز ودعائم لمواقع البناء الخاصة بكم.',
+                'product-5-feat-1': 'باركيليز مقاوم',
+                'product-5-feat-2': 'دعائم معدنية معتمدة',
+                'product-5-feat-3': 'مستلزمات المواقع',
+                'product-5-feat-4': 'استشارة تقنية مشمولة',
+                'product-6-title': 'أدوات معدنية',
+                'product-6-desc': 'مجموعة كاملة من الأدوات المعدنية والبراغي عالية الجودة لجميع تجميعاتكم.',
+                'product-6-feat-1': 'براغي عالية الدقة',
+                'product-6-feat-2': 'معدات معتمدة',
+                'product-6-feat-3': 'أدوات مهنية',
+                'product-6-feat-4': 'ضمان الجودة',
+                'btn-contact': 'طلب عرض سعر',
+                'btn-details': 'التفاصيل',
+                'btn-colors': 'الألوان المتاحة',
+                'btn-species': 'أنواع الأخشاب',
+                'btn-gallery': 'عرض المعرض',
+                'btn-calculate': 'حساب الأحمال',
+                'btn-catalog': 'الكتالوج الكامل',
+                'about-title-1': '25 سنة من',
+                'about-title-2': 'الخبرة',
+                'about-title-3': 'والمعرفة',
+                'about-p1': 'تأسست شركة ساكوم في عام 1999، وأصبحت مرجعاً لا غنى عنه في استيراد مواد البناء في الجزائر.',
+                'about-p2': 'برأس مال قدره 245 مليون دينار جزائري، نضمن استقرار وجودة خدماتنا لعملائنا المتطلبين.',
+                'about-p3': 'خبرتنا تغطي جميع مهن الخشب، من الأدوات المعدنية إلى المعدات التقنية الأكثر تخصصاً.',
+                'feature-1-title': 'جودة مضمونة',
+                'feature-1-desc': 'معايير مهنية',
+                'feature-2-title': 'توصيل سريع',
+                'feature-2-desc': 'خدمة فعالة مضمونة',
+                'feature-3-title': 'استشارة خبراء',
+                'feature-3-desc': 'مرافقة شخصية',
+                'feature-4-title': 'حضور وطني',
+                'feature-4-desc': 'تغطية الإقليم',
+                'locations-badge': 'عناويننا',
+                'locations-title': 'أين تجدوننا',
+                'locations-description': 'موقعان استراتيجيان لخدمتكم بشكل أفضل في جميع أنحاء الإقليم',
+                'location-1-title': 'المقر الرئيسي - تجنانت',
+                'location-2-title': 'المستودع - كوليا',
+                'footer-tagline': 'شريككم منذ 1999',
+                'footer-description': 'متخصصون في استيراد مواد البناء عالية الجودة في الجزائر لأكثر من 25 سنة.',
+                'footer-capital': 'رأس المال',
+                'footer-contact-title': 'اتصل بنا',
+                'footer-hours-title': 'ساعات العمل:',
+                'footer-hours-1': 'أحد-خميس: 08:00-17:00',
+                'footer-hours-2': 'السبت: 08:00-12:00',
+                'footer-locations-title': 'عناويننا',
+                'footer-tadjenanet': 'المقر - تجنانت',
+                'footer-kolea': 'المستودع - كوليا',
+                'footer-products-title': 'منتجاتنا',
+                'footer-product-1': 'الخشب المقوى',
+                'footer-product-2': 'MDF المطلي',
+                'footer-product-3': 'خشب صلب',
+                'footer-product-4': 'شرائح وقشور',
+                'footer-product-5': 'مواد البناء',
+                'footer-product-6': 'أدوات معدنية',
+                'footer-copyright': 'جميع الحقوق محفوظة. متخصصون في استيراد مواد البناء.'
+            },
+            
+            en: {
+                'company-name': 'SARL SACOM.S',
+                'company-tagline': 'Wood & Derivatives Import',
+                'current-lang': 'English',
+                'nav-home': 'Home',
+                'nav-about': 'About',
+                'nav-products': 'Products',
+                'nav-locations': 'Locations',
+                'hero-badge': 'Since 1999',
+                'hero-title': 'SARL SACOM.S',
+                'hero-subtitle-text': 'Your construction materials partner',
+                'hero-description': 'Specialized in importing quality wood and derivatives, we support your construction projects with expertise and professionalism for over 25 years.',
+                'hero-btn-products': 'Discover our products',
+                'hero-btn-contact': 'Our addresses',
+                'stat-years': 'Years of experience',
+                'stat-years-desc': 'Since 1999',
+                'stat-depots': 'Depots',
+                'stat-depots-desc': 'Tadjenanet and Koléa',
+                'stat-clients': 'Satisfied clients',
+                'stat-clients-desc': 'Professionals and companies',
+                'stat-products': 'Product ranges',
+                'stat-products-desc': 'Complete solutions',
+                'stat-capital': 'Capital (DA)',
+                'stat-capital-desc': 'Financial strength',
+                'stat-delivery': 'Fast delivery',
+                'stat-delivery-desc': 'Efficient service',
+                'products-badge': 'Our specialties',
+                'products-title': 'Product range',
+                'products-description': 'A selection of quality construction materials for all your professional projects',
+                'category-wood': 'Wood',
+                'category-panels': 'Panels',
+                'category-solid': 'Solid wood',
+                'category-decoration': 'Decoration',
+                'category-construction': 'Construction',
+                'category-hardware': 'Hardware',
+                'product-1-title': 'Plywood',
+                'product-1-desc': 'Quality plywood in 1220x2440mm dimensions, suitable for all your construction and development projects.',
+                'product-1-feat-1': 'E1 moisture resistance',
+                'product-1-feat-2': 'Quality finishes',
+                'product-1-feat-3': 'Various thicknesses available',
+                'product-1-feat-4': 'Quality certifications',
+                'product-2-title': 'Melamine MDF',
+                'product-2-desc': 'Melamine MDF panels with quality finishes, perfect for furniture and interior decoration.',
+                'product-2-feat-1': 'Various decorative finishes',
+                'product-2-feat-2': 'Thicknesses from 7.5mm to 25mm',
+                'product-2-feat-3': 'Smooth and uniform surface',
+                'product-2-feat-4': 'Easy machining',
+                'product-3-title': 'Solid wood',
+                'product-3-desc': 'Selection of solid wood species: oak, beech and exotic woods for your exceptional projects.',
+                'product-3-feat-1': 'Noble wood species available',
+                'product-3-feat-2': 'Controlled drying',
+                'product-3-feat-3': 'Custom dimensions possible',
+                'product-3-feat-4': 'Certified origin',
+                'product-4-title': 'Slats and veneers',
+                'product-4-desc': 'Modern decorative solutions for interior architecture: quality slats and veneers.',
+                'product-4-feat-1': 'Oak and beech finishes',
+                'product-4-feat-2': 'Decorative veneers',
+                'product-4-feat-3': 'Easy installation',
+                'product-4-feat-4': 'Guaranteed architectural effect',
+                'product-5-title': 'Construction materials',
+                'product-5-desc': 'Technical solutions for professionals: Parkelize and props for your construction sites.',
+                'product-5-feat-1': 'Resistant Parkelize',
+                'product-5-feat-2': 'Certified metal props',
+                'product-5-feat-3': 'Site accessories',
+                'product-5-feat-4': 'Technical advice included',
+                'product-6-title': 'Hardware',
+                'product-6-desc': 'Complete range of quality hardware and screws for all your assemblies.',
+                'product-6-feat-1': 'Precision screws',
+                'product-6-feat-2': 'Certified equipment',
+                'product-6-feat-3': 'Professional tools',
+                'product-6-feat-4': 'Quality guarantee',
+                'btn-contact': 'Request quote',
+                'btn-details': 'Details',
+                'btn-colors': 'Available colors',
+                'btn-species': 'Wood types',
+                'btn-gallery': 'View gallery',
+                'btn-calculate': 'Load calculation',
+                'btn-catalog': 'Complete catalog',
+                'about-title-1': '25 years of',
+                'about-title-2': 'expertise',
+                'about-title-3': 'and know-how',
+                'about-p1': 'Founded in 1999, SARL SACOM.S has become an essential reference in the import of construction materials in Algeria.',
+                'about-p2': 'With a capital of 245 million Algerian dinars, we guarantee the stability and quality of our services to demanding clients.',
+                'about-p3': 'Our expertise covers all wood trades, from hardware to the most specialized technical equipment.',
+                'feature-1-title': 'Guaranteed quality',
+                'feature-1-desc': 'Professional standards',
+                'feature-2-title': 'Fast delivery',
+                'feature-2-desc': 'Guaranteed efficient service',
+                'feature-3-title': 'Expert advice',
+                'feature-3-desc': 'Personalized support',
+                'feature-4-title': 'National presence',
+                'feature-4-desc': 'Territory coverage',
+                'locations-badge': 'Our addresses',
+                'locations-title': 'Where to find us',
+                'locations-description': 'Two strategic locations to better serve you throughout the territory',
+                'location-1-title': 'Head office - Tadjenanet',
+                'location-2-title': 'Depot - Koléa',
+                'footer-tagline': 'Your partner since 1999',
+                'footer-description': 'Specialists in importing quality construction materials in Algeria for over 25 years.',
+                'footer-capital': 'Share capital',
+                'footer-contact-title': 'Contact',
+                'footer-hours-title': 'Hours:',
+                'footer-hours-1': 'Sun-Thu: 08:00-17:00',
+                'footer-hours-2': 'Saturday: 08:00-12:00',
+                'footer-locations-title': 'Our addresses',
+                'footer-tadjenanet': 'Head office - Tadjenanet',
+                'footer-kolea': 'Depot - Koléa',
+                'footer-products-title': 'Our products',
+                'footer-product-1': 'Plywood',
+                'footer-product-2': 'Melamine MDF',
+                'footer-product-3': 'Solid wood',
+                'footer-product-4': 'Slats and veneers',
+                'footer-product-5': 'Construction materials',
+                'footer-product-6': 'Hardware',
+                'footer-copyright': 'All rights reserved. Specialists in construction materials import.'
+            }
+        };
+
+        let currentLanguage = 'fr';
+
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            
+            // Update active language option
+            document.querySelectorAll('.language-option').forEach(option => {
+                option.classList.remove('active');
+                if (option.dataset.lang === lang) {
+                    option.classList.add('active');
+                }
+            });
+
+            // Update current language text
+            document.getElementById('currentLang').textContent = translations[lang]['current-lang'];
+
+            // Update all translatable elements
+            document.querySelectorAll('[data-translate]').forEach(element => {
+                const key = element.getAttribute('data-translate');
+                if (translations[lang] && translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+
+            // Set document direction and language
+            document.documentElement.lang = lang;
+            if (lang === 'ar') {
+                document.documentElement.dir = 'rtl';
+                document.body.style.fontFamily = "'Tajawal', 'Inter', sans-serif";
+            } else {
+                document.documentElement.dir = 'ltr';
+                document.body.style.fontFamily = "'Inter', sans-serif";
+            }
+
+            // Close language dropdown
+            document.getElementById('languageSwitcher').classList.remove('active');
+        }
+
+        // Language switcher functionality
+        document.getElementById('languageToggle').addEventListener('click', function() {
+            document.getElementById('languageSwitcher').classList.toggle('active');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const switcher = document.getElementById('languageSwitcher');
+            if (!switcher.contains(event.target)) {
+                switcher.classList.remove('active');
+            }
+        });
+
+        // Mobile menu functionality
+        document.getElementById('mobileMenuToggle').addEventListener('click', function() {
+            this.classList.toggle('active');
+            document.getElementById('mobileMenu').classList.toggle('active');
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const offsetTop = target.offsetTop - 80;
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+                // Close mobile menu if open
+                document.getElementById('mobileMenu').classList.remove('active');
+                document.getElementById('mobileMenuToggle').classList.remove('active');
+            });
+        });
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set initial language
+            setLanguage('fr');
+        });
+    </script>
+</body>
+</html>
